@@ -3,7 +3,7 @@ import os
 from mininet.node import Controller, OVSKernelSwitch
 from mininet.log import setLogLevel, info
 from mn_wifi.node import OVSKernelAP, UserAP
-from mn_wifi.cli import CLI_wifi
+from mn_wifi.cli import CLI
 from mn_wifi.net import Mininet_wifi
 from mn_wifi.sumo.runner import sumo
 from mn_wifi.link import wmediumd, mesh
