@@ -4,17 +4,17 @@ import socket
 import time
 
 def loop_message(s):
-	i = 0
-	s.send(str('get.ap1.position').encode('utf-8'))
-	data = s.recv(1024).decode('utf-8')
-	print(data)
-	while(True):
-		s.send(str('get.ap1.position').encode('utf-8'))
-		data = s.recv(1024).decode('utf-8')
-		print(data)
-		i += 1
-		time.sleep(0.5)
-		s.close()
+    i = 0
+    s.send(str('get.ap1.position').encode('utf-8'))
+    data = s.recv(1024).decode('utf-8')
+    print(data)
+    while(True):
+        s.send(str('get.ap1.position').encode('utf-8'))
+        data = s.recv(1024).decode('utf-8')
+        print(data)
+        i += 1
+        time.sleep(0.5)
+        s.close()
 
 def client():
     host = '127.0.0.1'
@@ -27,14 +27,14 @@ def client():
             message = input('-> ')
         else:
             message = raw_input('-> ')
-	if message == 'TESTE':
-		print('Chamei o teste')
-		loop_message(s)
-	else:
-        	s.send(str(message).encode('utf-8'))
-        	data = s.recv(1024).decode('utf-8')
-        	print('Received from server: ' + data)
-	s.close()
+    if message == 'TESTE':
+        print('Chamei o teste')
+        loop_message(s)
+    else:
+        s.send(str(message).encode('utf-8'))
+        data = s.recv(1024).decode('utf-8')
+        print('Received from server: ' + data)
+    s.close()
 
 
 if __name__ == '__main__':
