@@ -87,7 +87,7 @@ def topology():
     print("Play SUMO.")
     print("Execute o Servidor Iperf")
 
-    CLI_wifi(net)
+    CLI(net)
 
     print("Todos os carros, menos o car1, disparando pro servidor...")
 
@@ -105,7 +105,7 @@ def topology():
     sleep(3)
 
     print("finalizando experimento...")
-    CLI_wifi(net)
+    CLI(net)
 
     info("Matando processos em segundo plano...")
     print("\n")
@@ -121,3 +121,7 @@ def topology():
     info("Todos os processos terminaram")
     info("*** Stopping network\n")
     net.stop()
+
+if __name__ == '__main__':
+    setLogLevel('debug')
+    topology()
