@@ -1,37 +1,34 @@
-#!/usr/bin/python
+"""Custom topology example
 
-"""This example creates a simple network topology in which
-   stations are equipped with batteries"""
+Two directly connected switches plus a host for each switch:
 
-from mininet.log import setLogLevel, info
-from mn_wifi.cli import CLI
-from mn_wifi.net import Mininet_wifi
+   host --- switch --- switch --- host
+
+Adding the 'topos' dict with a key/value pair to generate our newly defined
+topology enables one to pass in '--topo=mytopo' from the command line.
+"""
+
+from mininet.topo import Topo
+
+class MyTopo( Topo ):
+    "Simple topology example."
+
+    def __init__( self ):
+        "Create custom topo."
+
+        # Initialize topology
+        Topo.__init__( self )
+
+        # Add hosts and switches
+        leftHost = self.addHost( 'h1' )
+        rightHost = self.addHost( 'h2' )
+        leftSwitch = self.addSwitch( 's3' )
+        rightSwitch = self.addSwitch( 's4' )
+
+        # Add links
+        self.addLink( leftHost, leftSwitch )
+        self.addLink( leftSwitch, rightSwitch )
+        self.addLink( rightSwitch, rightHost )
 
 
-def topology():
-    "Create a network."
-    net = Mininet_wifi(iot_module='fakelb')
-    # iot_module: fakelb or mac802154_hwsim
-    # mac802154_hwsim is only supported from kernel 4.18
-
-    info("*** Creating nodes\n")
-    net.addSensor('sensor1', ip6='2001::1/64', voltage=3.7, panid='0xbeef')
-    net.addSensor('sensor2', ip6='2001::2/64', voltage=3.7, panid='0xbeef')
-    net.addSensor('sensor3', ip6='2001::3/64', voltage=3.7, panid='0xbeef')
-
-    info("*** Configuring wifi nodes\n")
-    net.configureWifiNodes()
-
-    info("*** Starting network\n")
-    net.build()
-
-    info("*** Running CLI\n")
-    CLI(net)
-
-    info("*** Stopping network\n")
-    net.stop()
-
-
-if __name__ == '__main__':
-    setLogLevel('info')
-    topology()
+topos = { 'mytopo': ( lambda: MyTopo() ) }
