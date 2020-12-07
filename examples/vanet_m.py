@@ -56,68 +56,68 @@ def topology():
     net.addLink(server, switch)
 
 
-info("*** Configuring wifi nodes\n")
-net.configureWifiNodes()
-net.addLink(e1, switch)
-net.addLink(e2, switch)
-net.addLink(e3, switch)
-net.addLink(e4, switch)
-net.addLink(e5, switch)
-net.addLink(e6, switch)
-net.addLink(server, switch)
+    info("*** Configuring wifi nodes\n")
+    net.configureWifiNodes()
+    net.addLink(e1, switch)
+    net.addLink(e2, switch)
+    net.addLink(e3, switch)
+    net.addLink(e4, switch)
+    net.addLink(e5, switch)
+    net.addLink(e6, switch)
+    net.addLink(server, switch)
 
-for car in cars:
-    net.addLink(car, intf=car.params['wlan'][1], cls=mesh, ssid='mesh-ssid', channel=5)
-net.useExternalProgram(program=sumo, port=8813, config_file='map.sumocfg')
-info("*** Starting network\n")
-net.build()
-c1.start()
-switch.start([c1])
-e1.start([c1])
-e2.start([c1])
-e3.start([c1])
-e4.start([c1])
-e5.start([c1])
-e6.start([c1])
+    for car in cars:
+        net.addLink(car, intf=car.params['wlan'][1], cls=mesh, ssid='mesh-ssid', channel=5)
+    net.useExternalProgram(program=sumo, port=8813, config_file='map.sumocfg')
+    info("*** Starting network\n")
+    net.build()
+    c1.start()
+    switch.start([c1])
+    e1.start([c1])
+    e2.start([c1])
+    e3.start([c1])
+    e4.start([c1])
+    e5.start([c1])
+    e6.start([c1])
 
-for car in cars:
-    car.setIP('192.168.0.%s/24' % (int(cars.index(car)) + 1), intf='%s-wlan0' % car)
-car.setIP('192.168.1.%s/24' % (int(cars.index(car)) + 1), intf='%s-mp1' % car)
+    for car in cars:
+        car.setIP('192.168.0.%s/24' % (int(cars.index(car)) + 1), intf='%s-wlan0' % car)
+    car.setIP('192.168.1.%s/24' % (int(cars.index(car)) + 1), intf='%s-mp1' % car)
 
-print("Play SUMO.")
-print("Execute o Servidor Iperf")
+    print("Play SUMO.")
+    print("Execute o Servidor Iperf")
 
-CLI_wifi(net)
+    CLI_wifi(net)
 
-print("Todos os carros, menos o car1, disparando pro servidor...")
+    print("Todos os carros, menos o car1, disparando pro servidor...")
 
-for x in range(carNumber):
-    if (x != 0):
-        print(x)
+    for x in range(carNumber):
+        if (x != 0):
+            print(x)
 
-print(carNumber)
-print(net.get('car%s' % (x + 1)))
+    print(carNumber)
+    print(net.get('car%s' % (x + 1)))
 
-net.get('car%s' % (x + 1)).cmd('iperf -c 192.168.0.250 -u -b 27M -y c -t 2000 &')
+    net.get('car%s' % (x + 1)).cmd('iperf -c 192.168.0.250 -u -b 27M -y c -t 2000 &')
 
-for x in range(15):
-    net.get('car1').cmd('iperf -c 192.168.0.250 -u -b 27M -y c -t 15 ')
-sleep(3)
+    for x in range(15):
+        net.get('car1').cmd('iperf -c 192.168.0.250 -u -b 27M -y c -t 15 ')
+    sleep(3)
 
-print("finalizando experimento...")
-CLI_wifi(net)
+    print("finalizando experimento...")
+    CLI_wifi(net)
 
-info("Matando processos em segundo plano...")
-print("\n")
+    info("Matando processos em segundo plano...")
+    print("\n")
 
-for x in range(0, carNumber):
-    if (x != 0):
-        net.get('car%s' % (x + 1)).cmd('kill %while')
-pid = int(net.get('car%s' % (x + 1)).cmd('echo $!'))
-print(x + 1)
-print(pid)
+    for x in range(0, carNumber):
+        if (x != 0):
+            net.get('car%s' % (x + 1)).cmd('kill %while')
+    pid = int(net.get('car%s' % (x + 1)).cmd('echo $!'))
+    print(x + 1)
+    print(pid)
 
-net.get('car%s' % (x + 1)).cmd('kill -9 %i' % pid)
-info("Todos os processos terminaram")
-info("*** Stopping network\n")
-net.stop()
+    net.get('car%s' % (x + 1)).cmd('kill -9 %i' % pid)
+    info("Todos os processos terminaram")
+    info("*** Stopping network\n")
+    net.stop()
