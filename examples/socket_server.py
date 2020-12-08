@@ -38,7 +38,6 @@ def topology():
     # The same must be done with socket_client.py
     info("*** Starting Socket Server\n")
     net.socketServer(ip='127.0.0.1', port=12345)
-
     info("*** Running CLI\n")
     CLI(net)
 
