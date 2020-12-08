@@ -21,4 +21,4 @@ class tree(Topo):
         self.addLink(s2, s1)
         self.addLink(s3, s1)
 
-topos = {'tree': {lambda : tree()}}
+topos = {'tree': (lambda : tree())}
